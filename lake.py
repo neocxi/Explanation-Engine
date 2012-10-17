@@ -21,7 +21,7 @@ lake_graph = DiscreteBayesNet([island, bird, pox])
 
 # test the proabalistic inference engine
 print "prob dist of presence of birds" , lake_graph.enumerate_ask('Bird', {})
-print "prob dist of presence of birds" , lake_graph.enumerate_ask('Pox', {})
+print "prob dist of presence of pox" , lake_graph.enumerate_ask('Pox', {})
 print "exact prob of pox present", lake_graph.prob({'Pox':'T'})
 print "prob dist of presence of birds conditioned on having an island" ,\
                                 lake_graph.enumerate_ask('Bird', {'Island':'T'})
