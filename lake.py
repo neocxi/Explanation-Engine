@@ -1,5 +1,6 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
 from explanation_tree import generate_explanation_tree
+from most_relevant_explanation import generate_MRE
 
 # build the lake graph
 island = DiscreteBayesNode('Island', [], \
@@ -31,3 +32,6 @@ print "exact prob of birds present given it doesnt have an island", \
 #test running explanation tree algorithm on the above graph
 test_tree = generate_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, [], 0.01, 0.2) 
 print test_tree
+
+MRE = generate_MRE(lake_graph, {'Pox':'T'})
+print MRE

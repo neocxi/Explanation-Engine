@@ -1,4 +1,4 @@
-from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
+from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut, prob_given
 import math
 
 class ExplanationTreeNode(object):
@@ -51,10 +51,6 @@ def merge(a,b):
     c.update(b)
     return c
     
-def prob_given(graph, posterior, prior): 
-    """calculate P(posterior|prior) on a given graph. Posterior and prior are two dicts
-    specifying assignments"""
-    return graph.prob(merge(prior, posterior)) / graph.prob(prior)
     
 def max_mutual_information(graph, explanatory_var, condition):
     """Return (argmax, max) X in exp_var such that Sum of Y in exp_var INF(X;Y | condition)"""

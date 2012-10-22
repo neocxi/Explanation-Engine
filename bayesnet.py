@@ -8,6 +8,12 @@ Modified from http://homes.soic.indiana.edu/classes/spring2012/csci/b553-hauserk
 import random
 import math
 
+def merge(a,b):
+    """merge a with b"""
+    c = a.copy()
+    c.update(b)
+    return c
+
 def cumsum(ls):
 	"""Returns a list containing the cumulative sums at every element of
 	ls.
@@ -284,6 +290,11 @@ class DiscreteBayesNet(object):
 		"""Gives the probability over the entire graph of the evidence in e.
 		Good for deciding the likelihood of a dataset given a network."""
 		return self.enumerate_all(self.variables, e)
+
+	def prob_given(self, posterior, prior): 
+	    """calculate P(posterior|prior) on a given graph. Posterior and prior are two dicts
+	    specifying assignments"""
+	    return self.prob(merge(prior, posterior)) / self.prob(prior)
 		
 	def ml_result(self, var, e):
 		"""Gives the maximum-likelihood estimate of the variable var, given
@@ -484,6 +495,11 @@ class DiscreteBayesNet(object):
 			oldll = ll
 		
 		
+def prob_given(graph, posterior, prior): 
+    """calculate P(posterior|prior) on a given graph. Posterior and prior are two dicts
+    specifying assignments"""
+    return graph.prob(merge(prior, posterior)) / graph.prob(prior)
+
 if __name__ == "__main__":
 	# The burglary node has no parents
 	burglary = DiscreteBayesNode('Burglary', [],
