@@ -62,26 +62,42 @@ def assignment_space(graph, n, explanadum):
 	"""returns all possible assignments to n variables in this graph
 	in a list"""
 	space = []
-	mutations = []
-	init_assignment = {}
 	for choice in combination(n, \
 		[key for key in graph.variables.keys() if key not in explanadum.keys()]):
 		# Dont give assignments to variables set in explanadum 
+		mutations = []
+		init_assignment = {}
 		for node_name in choice:
 			node = graph.get_node_with_name(node_name)
-			init_assignment.update([(node_name, node.cpt.myVals[0])])
+			init_assignment.update( [ (node_name, node.cpt.myVals[0]) ] )
 			for other_possible_value in node.cpt.myVals[1:]:
-				mutations.append((node_name, other_possible_value))
+				mutations.append( (node_name, other_possible_value) )
+		space.append( init_assignment )
+		for j in range( len(mutations) ):
+			for change in combination(j+1, mutations):
+				assignment = init_assignment.copy()
+				assignment.update( change )
+				space.append(assignment)
+	# 	if not len(init_assignment):
+	# 		for node_name in choice:
+	# 			node = graph.get_node_with_name(node_name)
+	# 			init_assignment.update([(node_name, node.cpt.myVals[0])])
+	# 			for other_possible_value in node.cpt.myVals[1:]:
+	# 				mutations.append((node_name, other_possible_value))
+	# 	else:
+	# 		for node_name in choice:
+	# 			node = graph.get_node_with_name(node_name)
+	# 			for possible_value in node.cpt.myVals:
+	# 				mutations.append((node_name, possible_value))
 
-	# initial assignment(every node has been assigned to default value)
-	space.append(init_assignment)
-	# go through all combinations of mutations
-	for j in range(len(mutations)):
-		for change in combination(j+1, mutations):
-			assignment = init_assignment.copy()
-			assignment.update(change)
-			space.append(assignment)
-
+	# # initial assignment(every node has been assigned to default value)
+	# space.append(init_assignment)
+	# # go through all combinations of mutations
+	# for j in range(len(mutations)):
+	# 	for change in combination(j+1, mutations):
+	# 		assignment = init_assignment.copy()
+	# 		assignment.update(change)
+	# 		space.append(assignment)
 	return space
 
 
