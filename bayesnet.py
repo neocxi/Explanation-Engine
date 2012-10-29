@@ -499,12 +499,10 @@ class DiscreteBayesNet(object):
 		of a hash (ie. intervention = { node : value } ) 
 		This intervention cuts off causal information flow from nodes back to their parents."""
 		new_nodes = [ node for node in self.nodes if node.name not in intervention.keys() ]
-		print "newnodes", new_nodes
 		for name in intervention.keys():
-			node = DiscreteBayesNode(None, name, \
+			node = DiscreteBayesNode(name, [] , \
 					DiscreteCPT([intervention[name]], [1]))
 			new_nodes.append(node)
-			print "intervened", node
 
 		return DiscreteBayesNet(new_nodes)
 		
