@@ -30,8 +30,17 @@ print "exact prob of birds present given it doesnt have an island", \
                                 lake_graph.prob({'Bird':'T','Island':'F' })
                                 
 #test running explanation tree algorithm on the above graph
+print "Testing Explanation Tree:"
 test_tree = generate_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, [], 0.01, 0.2) 
 print test_tree
+print "========================="
 
+print "Testing MRE:"
 MRE = generate_MRE(lake_graph, {'Pox':'T'})
 print MRE
+print "========================="
+
+print "Testing Causal Intervention:"
+intervened = lake_graph.create_graph_with_intervention({'Bird' : 'T'})
+print intervened.prob( {'Bird' : 'T'} )
+

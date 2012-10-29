@@ -493,12 +493,25 @@ class DiscreteBayesNet(object):
 			if abs(ll-oldll) < eps:
 				return
 			oldll = ll
+
+	def create_graph_with_intervention(self, intervention):
+		"""Create a new graph with intervention specified in parameter in form
+		of a hash (ie. intervention = { node : value } ) 
+		This intervention cuts off causal information flow from nodes back to their parents."""
+		new_nodes = [ node for node in self.nodes if node.name not in intervention.keys() ]
+		for name in intervention.keys():
+			node = DiscreteBayesNode(None, name, \
+					DiscreteCPT([intervention[name]], [1]))
+			new_nodes.append(node)
+
+		return DiscreteBayesNet(new_nodes)
 		
 		
 def prob_given(graph, posterior, prior): 
     """calculate P(posterior|prior) on a given graph. Posterior and prior are two dicts
     specifying assignments"""
     return graph.prob(merge(prior, posterior)) / graph.prob(prior)
+
 
 if __name__ == "__main__":
 	# The burglary node has no parents
