@@ -33,8 +33,9 @@ class ExplanationTreeNode(object):
 def generate_explanation_tree(graph, explanatory_var, explanadum, path, alpha, beta):
     x, inf = max_mutual_information(graph, explanatory_var, merge(explanadum, path))
     
-    # if inf < alpha or prob_given(graph, dict(path), explanadum):
-    #        return ExplanationTreeNode()
+    if inf < alpha or prob_given(graph, dict(path), explanadum) < beta:
+        return ExplanationTreeNode()
+
     if len(explanatory_var) is 0:
         return ExplanationTreeNode()
     t = ExplanationTreeNode(parent = path[-1][0] if path else None, root = x) #new tree with a parent pointer to its parent
@@ -71,7 +72,7 @@ def max_mutual_information(graph, explanatory_var, condition):
                                         prob_given(graph, y_assign, condition))
                 cur_inf += temp * prob_given(graph, {x:val_x}, condition)
         
-        print "current arg", x, cur_inf
+        # print "current arg", x, cur_inf
         if cur_inf > max_inf:
             argmax, max_inf = x, cur_inf
     return argmax, max_inf

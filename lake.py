@@ -31,7 +31,7 @@ print "exact prob of birds present given it doesnt have an island", \
                                 
 #test running explanation tree algorithm on the above graph
 print "Testing Explanation Tree:"
-test_tree = generate_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, [], 0.01, 0.2) 
+test_tree = generate_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, [], 0.0001, 0.0002) 
 print test_tree
 print "========================="
 
