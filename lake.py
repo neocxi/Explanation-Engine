@@ -45,4 +45,5 @@ print "Intervene Bird to true"
 intervened = lake_graph.create_graph_with_intervention({'Bird' : 'T'})
 print "post intervention probability of Bird being true", intervened.prob( {'Bird' : 'T'} )
 print "post intervention prob of Pox being true", intervened.prob( {'Pox':'T'} )
+print "========================="
 
