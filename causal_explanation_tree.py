@@ -14,9 +14,9 @@ def generate_causal_explanation_tree(graph, explanatory_var, observation, explan
     t = ExplanationTreeNode(parent = path[-1][0] if path else None, root = x) #new tree with a parent pointer to its parent
     
     for value in graph.get_node_with_name(x).cpt.values():
-    	intervened_graph = graph.create_graph_with_intervention( {x:calue} )
-        new_tree = generate_explanation_tree(intervened_graph, cut(explanatory_var, x), \
-                            explanadum, path + [(x, value)], alpha)
+    	intervened_graph = graph.create_graph_with_intervention( {x:value} )
+        new_tree = generate_causal_explanation_tree(intervened_graph, cut(explanatory_var, x), \
+                            observation, explanadum, path + [(x, value)], alpha)
         strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
         					graph.prob_given(explanadum, observation))
         t.add_branch(value, new_tree, prob_given(graph, dict(path + [(x, value)]), explanadum) )
@@ -31,17 +31,24 @@ def max_causal_information(graph, explanatory_var, observation, explanadum):
 		for x_val in graph.get_node_with_name(x).cpt.values():
 			intervened_graph = graph.create_graph_with_intervention( {x:x_val} )
 			denominator = sum( [graph.prob_given({x:x_val_temp}, observation) \
-								* intervened_graph(explanadum, observation)
+								* intervened_graph.prob_given(explanadum, observation)
 								 for x_val_temp in graph.get_node_with_name(x).cpt.values()])
-			log_part = math.log( intervened_graph.prob_given(explanadum, observation) / \
-								 denominator)
+			print denominator, "<= deno"
+			# log_part = math.log( intervened_graph.prob_given(explanadum, observation) / \
+			# 					 denominator)
+			log_part = intervened_graph.prob_given(explanadum, observation)
+			print "log", log_part
 			cur_inf += graph.prob_given({x:x_val}, observation) * \
 						intervened_graph.prob_given(explanadum, observation) / \
 						graph.prob_given(explanadum, observation) * \
 						log_part
-
+			print "inf", graph.prob_given({x:x_val}, observation) * \
+						intervened_graph.prob_given(explanadum, observation) / \
+						graph.prob_given(explanadum, observation) * \
+						log_part
+		print "node", x
+		print "cur_inf", cur_inf
 		if cur_inf > max_inf:
 			max_x = x
 			max_inf = cur_inf
-
 	return max_x, max_inf

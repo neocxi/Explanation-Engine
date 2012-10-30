@@ -1,6 +1,7 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
 from explanation_tree import generate_explanation_tree
 from most_relevant_explanation import generate_MRE
+from causal_explanation_tree import generate_causal_explanation_tree
 
 # build the lake graph
 island = DiscreteBayesNode('Island', [], \
@@ -47,3 +48,7 @@ print "post intervention probability of Bird being true", intervened.prob( {'Bir
 print "post intervention prob of Pox being true", intervened.prob( {'Pox':'T'} )
 print "========================="
 
+print "Testing Causal Explanation Tree:"
+test_tree = generate_causal_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, {'Pox':'T'}, [], 0.0001) 
+print test_tree
+print "========================="
