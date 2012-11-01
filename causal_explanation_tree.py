@@ -18,8 +18,8 @@ def generate_causal_explanation_tree(ori_graph, graph, explanatory_var, observat
         new_tree = generate_causal_explanation_tree(ori_graph, intervened_graph, cut(explanatory_var, x), \
                             observation, explanadum, path + [(x, value)], alpha)
         strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
-        					ori_graph.prob_given(explanadum, observation))
-        t.add_branch(value, new_tree, prob_given(graph, dict(path + [(x, value)]), explanadum) )
+        					ori_graph.prob_given(explanadum, observation) )
+        t.add_branch(value, new_tree, strength)
 
     return t
 
@@ -31,18 +31,14 @@ def max_causal_information(graph, explanatory_var, observation, explanadum):
 		denominator = sum( [graph.prob_given({x:x_val_temp}, observation) \
 								* graph.create_graph_with_intervention({x:x_val_temp}).prob_given(explanadum, observation)
 								 for x_val_temp in graph.get_node_with_name(x).cpt.values()] )
-		print "denominatior" ,denominator
 		for x_val in graph.get_node_with_name(x).cpt.values():
 			intervened_graph = graph.create_graph_with_intervention( {x:x_val} )
 			log_part = math.log( intervened_graph.prob_given(explanadum, observation) / \
 								 denominator)
-			print "log", log_part
 			cur_inf += graph.prob_given({x:x_val}, observation) * \
 						intervened_graph.prob_given(explanadum, observation) / \
 						graph.prob_given(explanadum, observation) * \
 						log_part
-		print "node", x
-		print "cur_inf", cur_inf
 		if cur_inf > max_inf:
 			max_x = x
 			max_inf = cur_inf

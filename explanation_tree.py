@@ -21,7 +21,7 @@ class ExplanationTreeNode(object):
         out = ""
         out += "This node is: %s\n" % self.root
         for branch in self.children.keys():
-            out += "has branch assignment of %s with probability of %f\n" % (branch, self.children_prob[branch])
+            out += "%s has branch assignment of %s with probability of %f\n" % (self.root, branch, self.children_prob[branch])
             if not self.children[branch].is_empty():
                out += "points to:"
                out += self.children[branch].__str__()
