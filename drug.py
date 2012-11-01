@@ -35,6 +35,6 @@ print MRE
 print "========================="
 
 print "Testing Causal Explanation Tree:"
-test_tree = generate_causal_explanation_tree(drug_graph, ['Sex', 'Drug'], {'Recovery':'recovery'},{'Recovery':'recovery'}, [], 0.001) 
+test_tree = generate_causal_explanation_tree(drug_graph, drug_graph, ['Sex', 'Drug'], {},{'Recovery':'recovery'}, [], 0.001) 
 print test_tree
 print "========================="

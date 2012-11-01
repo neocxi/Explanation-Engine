@@ -49,6 +49,6 @@ print "post intervention prob of Pox being true", intervened.prob( {'Pox':'T'} )
 print "========================="
 
 print "Testing Causal Explanation Tree:"
-test_tree = generate_causal_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, {'Pox':'T'}, [], 0.0001) 
+test_tree = generate_causal_explanation_tree(lake_graph, lake_graph, ['Bird', 'Island'], {}, {'Pox':'T'}, [], 0.0001) 
 print test_tree
 print "========================="

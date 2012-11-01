@@ -2,7 +2,7 @@ from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut, prob
 from explanation_tree import ExplanationTreeNode, max_mutual_information, merge
 import math
 
-def generate_causal_explanation_tree(graph, explanatory_var, observation, explanadum, path, alpha):
+def generate_causal_explanation_tree(ori_graph, graph, explanatory_var, observation, explanadum, path, alpha):
     x, inf = max_causal_information(graph, explanatory_var, observation, explanadum)
     
     if inf < alpha:
@@ -15,10 +15,10 @@ def generate_causal_explanation_tree(graph, explanatory_var, observation, explan
     
     for value in graph.get_node_with_name(x).cpt.values():
     	intervened_graph = graph.create_graph_with_intervention( {x:value} )
-        new_tree = generate_causal_explanation_tree(intervened_graph, cut(explanatory_var, x), \
+        new_tree = generate_causal_explanation_tree(ori_graph, intervened_graph, cut(explanatory_var, x), \
                             observation, explanadum, path + [(x, value)], alpha)
         strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
-        					graph.prob_given(explanadum, observation))
+        					ori_graph.prob_given(explanadum, observation))
         t.add_branch(value, new_tree, prob_given(graph, dict(path + [(x, value)]), explanadum) )
 
     return t
@@ -28,21 +28,16 @@ def max_causal_information(graph, explanatory_var, observation, explanadum):
 	max_x, max_inf = None, float("-inf")
 	for x in explanatory_var:
 		cur_inf = 0
+		denominator = sum( [graph.prob_given({x:x_val_temp}, observation) \
+								* graph.create_graph_with_intervention({x:x_val_temp}).prob_given(explanadum, observation)
+								 for x_val_temp in graph.get_node_with_name(x).cpt.values()] )
+		print "denominatior" ,denominator
 		for x_val in graph.get_node_with_name(x).cpt.values():
 			intervened_graph = graph.create_graph_with_intervention( {x:x_val} )
-			denominator = sum( [graph.prob_given({x:x_val_temp}, observation) \
-								* intervened_graph.prob_given(explanadum, observation)
-								 for x_val_temp in graph.get_node_with_name(x).cpt.values()])
-			print denominator, "<= deno"
-			# log_part = math.log( intervened_graph.prob_given(explanadum, observation) / \
-			# 					 denominator)
-			log_part = intervened_graph.prob_given(explanadum, observation)
+			log_part = math.log( intervened_graph.prob_given(explanadum, observation) / \
+								 denominator)
 			print "log", log_part
 			cur_inf += graph.prob_given({x:x_val}, observation) * \
-						intervened_graph.prob_given(explanadum, observation) / \
-						graph.prob_given(explanadum, observation) * \
-						log_part
-			print "inf", graph.prob_given({x:x_val}, observation) * \
 						intervened_graph.prob_given(explanadum, observation) / \
 						graph.prob_given(explanadum, observation) * \
 						log_part
