@@ -67,6 +67,8 @@ def max_mutual_information(graph, explanatory_var, condition):
                 temp = 0
                 for val_y in graph.get_node_with_name(y).cpt.values():
                     y_assign = {y:val_y}
+                    print "x_assign, x_assign", y_assign, x_assign, prob_given(graph, y_assign, x_assign)
+                    print "y_assign, condition", y_assign, condition, prob_given(graph, y_assign, condition)
                     temp += prob_given(graph, y_assign, x_assign) * \
                             math.log(prob_given(graph, y_assign, x_assign) / \
                                         prob_given(graph, y_assign, condition))
