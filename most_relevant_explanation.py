@@ -102,4 +102,8 @@ def assignment_space(graph, n, explanadum):
 
 
 def calculate_GBF(graph, space, assign, explanadum):
-	return graph.prob_given(explanadum, assign) / sum( [graph.prob_given(explanadum, neg) for neg in space if neg != assign] )
+	# print "assign, prob1, prob2: ", assign, graph.prob_given(explanadum, assign), sum( [graph.prob_given(explanadum, neg) * graph.prob(neg) for neg in space if neg != assign] )
+	return graph.prob_given(explanadum, assign) / \
+			sum( [graph.prob_given(explanadum, neg) * graph.prob(neg) for neg in space if neg != assign] ) * \
+			sum( [graph.prob(neg) for neg in space if neg != assign] )
+	# return graph.prob_given(explanadum, assign) / (1 - graph.prob_given(explanadum, assign))

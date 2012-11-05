@@ -294,7 +294,8 @@ class DiscreteBayesNet(object):
 	def prob_given(self, posterior, prior): 
 	    """calculate P(posterior|prior) on a given graph. Posterior and prior are two dicts
 	    specifying assignments"""
-	    return self.prob(merge(prior, posterior)) / self.prob(prior)
+	    # print "posterior, prior", posterior, prior
+	    return self.prob(merge(prior, posterior)) / self.prob(prior) if self.prob(prior) else 0
 		
 	def ml_result(self, var, e):
 		"""Gives the maximum-likelihood estimate of the variable var, given
