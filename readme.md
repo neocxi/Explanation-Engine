@@ -6,3 +6,4 @@
         -lake.py : Example 
         -drug.py : Example from Pearl(2000)
         -circuit.py : Example from Yuan(2009)
+        -asia.py : Example from Pellet(2008)
