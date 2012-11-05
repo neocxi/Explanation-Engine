@@ -18,15 +18,17 @@ class ExplanationTreeNode(object):
         self.children_prob[assignment] = prob
 
     def __str__(self):
-        out = ""
-        out += "This node is: %s\n" % self.root
-        for branch in self.children.keys():
-            out += "%s has branch assignment of %s with probability of %f\n" % (self.root, branch, self.children_prob[branch])
-            if not self.children[branch].is_empty():
-               out += "points to:"
-               out += self.children[branch].__str__()
+        return self.print_tree(0)
 
-        return out
+    def print_tree(self, depth):
+        prefix = depth * "-"
+        out = ""
+        out += prefix + "This node is: %s\n" % self.root
+        for branch in self.children.keys():
+            out += prefix + "%s has branch assignment of %s with probability of %f\n" % (self.root, branch, self.children_prob[branch])
+            if not self.children[branch].is_empty():
+               out += self.children[branch].print_tree(depth + 2)
+        return out 
             
 
 
@@ -67,11 +69,12 @@ def max_mutual_information(graph, explanatory_var, condition):
                 temp = 0
                 for val_y in graph.get_node_with_name(y).cpt.values():
                     y_assign = {y:val_y}
-                    print "x_assign, x_assign", y_assign, x_assign, prob_given(graph, y_assign, x_assign)
-                    print "y_assign, condition", y_assign, condition, prob_given(graph, y_assign, condition)
-                    temp += prob_given(graph, y_assign, x_assign) * \
-                            math.log(prob_given(graph, y_assign, x_assign) / \
-                                        prob_given(graph, y_assign, condition))
+                    temp += graph.prob_given(y_assign, x_assign) * \
+                            math.log(graph.prob_given(y_assign, x_assign) / \
+                                        graph.prob_given(y_assign, condition)) \
+                            if graph.prob_given(y_assign, x_assign) and \
+                               graph.prob_given(y_assign, condition) \
+                            else 0
                 cur_inf += temp * prob_given(graph, {x:val_x}, condition)
         
         # print "current arg", x, cur_inf
