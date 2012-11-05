@@ -5,3 +5,4 @@
         -causal_explanation_tree.py : Causal explanation tree algorithm (Pellet)
         -lake.py : Example 
         -drug.py : Example from Pearl(2000)
+        -circuit.py : Example from Yuan(2009)

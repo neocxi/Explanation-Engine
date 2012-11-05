@@ -37,7 +37,7 @@ print test_tree
 print "========================="
 
 print "Testing MRE:"
-MRE = generate_MRE(lake_graph, {'Pox':'T'})
+MRE = generate_MRE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
 print MRE
 print "========================="
 

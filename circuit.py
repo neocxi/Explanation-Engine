@@ -76,7 +76,7 @@ print "========================="
 
 
 print "Testing MRE:"
-MRE = generate_MRE(circuit_graph, {'Output':'on'})
+MRE = generate_MRE(circuit_graph, {'Output':'on', 'Input':'on'}, ['A_switch', 'B_switch', 'C_switch', 'D_switch'])
 print MRE
 print "========================="
 

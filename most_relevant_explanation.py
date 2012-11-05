@@ -1,23 +1,26 @@
 # This is an implementation of an algorithm finding 
 # the Most Relevant Explanation(Yuan)
 
-def generate_MRE(graph, explanadum):
+def generate_MRE(graph, explanadum, exp_var):
 	"""Returns a pair(assign, GBF) where assign is a list that contain pairs of
 	assignments and GBF is the generalized Bayes factor"""
 
 	max_assignment = None
 	max_GBF = float('-inf')
-	for i in range(len(graph.nodes) - len(explanadum)): #a MRE can take 1~N assignments
-		space = assignment_space(graph, i+1, explanadum)
+	out = []
+	for i in range(len(exp_var)): #a MRE can take 1~N assignments
+		space = assignment_space(graph, i+1, explanadum, exp_var)
 		for ind_assignment in space:
 			cur_GBF = calculate_GBF(graph, space, ind_assignment, explanadum)
 			# for debugging, output every assignment and thier GBF
-			print "Assignment", ind_assignment, " GBF: ", cur_GBF
+			# print "Assignment", ind_assignment, " GBF: ", cur_GBF
+			out.append( (ind_assignment, cur_GBF) )
 			if cur_GBF > max_GBF:
 				max_assignment = ind_assignment
 				max_GBF = cur_GBF
 
-	return max_assignment, max_GBF
+	# return max_assignment, max_GBF
+	return sorted(out, key = lambda x: x[1])
 
 
 def permutation(n, choose_from):
@@ -58,12 +61,12 @@ def combination(n, choose_from):
 			combinations.append(set(item))
 	return [list(item) for item in combinations]
 
-def assignment_space(graph, n, explanadum):
+def assignment_space(graph, n, explanadum, exp_var):
 	"""returns all possible assignments to n variables in this graph
 	in a list"""
 	space = []
 	for choice in combination(n, \
-		[key for key in graph.variables.keys() if key not in explanadum.keys()]):
+		[key for key in exp_var if key not in explanadum.keys()]):
 		# Dont give assignments to variables set in explanadum 
 		mutations = []
 		init_assignment = {}
