@@ -17,7 +17,7 @@ d = DiscreteBayesNode('D_switch', [],\
 b_out = DiscreteBayesNode('B_output', ['Input', 'B_switch'], \
 						DiscreteCPT(['on', 'off'], 
 							{
-							('on', 'def') : [1, 0],
+							('on', 'def') : [.99, .01],
 							('on', 'ok') : [0, 1],
 							('off', 'def') : [0, 1],
 							('off', 'ok') : [0, 1]
@@ -25,7 +25,7 @@ b_out = DiscreteBayesNode('B_output', ['Input', 'B_switch'], \
 a_out = DiscreteBayesNode('A_output', ['Input', 'A_switch'], \
 						DiscreteCPT(['on', 'off'], 
 							{
-							('on', 'def') : [1, 0],
+							('on', 'def') : [.999, .001],
 							('on', 'ok') : [0, 1],
 							('off', 'def') : [0, 1],
 							('off', 'ok') : [0, 1]
@@ -33,7 +33,7 @@ a_out = DiscreteBayesNode('A_output', ['Input', 'A_switch'], \
 c_out = DiscreteBayesNode('C_output', ['B_output', 'C_switch'], \
 						DiscreteCPT(['on', 'off'], 
 							{
-							('on', 'def') : [1, 0],
+							('on', 'def') : [.985, .015],
 							('on', 'ok') : [0, 1],
 							('off', 'def') : [0, 1],
 							('off', 'ok') : [0, 1]
@@ -41,7 +41,7 @@ c_out = DiscreteBayesNode('C_output', ['B_output', 'C_switch'], \
 d_out = DiscreteBayesNode('D_output', ['B_output', 'D_switch'], \
 						DiscreteCPT(['on', 'off'], 
 							{
-							('on', 'def') : [1, 0],
+							('on', 'def') : [.995, .005],
 							('on', 'ok') : [0, 1],
 							('off', 'def') : [0, 1],
 							('off', 'ok') : [0, 1]
@@ -49,13 +49,13 @@ d_out = DiscreteBayesNode('D_output', ['B_output', 'D_switch'], \
 out = DiscreteBayesNode('Output', ['A_output', 'C_output', 'D_output'], \
 						DiscreteCPT(['on', 'off'],
 							{
-							('on', 'on', 'on') : [1, 0],
-							('on', 'on', 'off') : [1, 0],
-							('on', 'off', 'on') : [1, 0],
-							('on', 'off', 'off') : [1, 0],
-							('off', 'on', 'off') : [1, 0],
-							('off', 'on', 'on') : [1, 0],
-							('off', 'off', 'on') : [1, 0],
+							('on', 'on', 'on') : [.999995, .000005],
+							('on', 'on', 'off') : [.999, .001],
+							('on', 'off', 'on') : [.9995, .0005],
+							('on', 'off', 'off') : [.9, .1],
+							('off', 'on', 'off') : [.99, .01],
+							('off', 'on', 'on') : [.99995, .00005],
+							('off', 'off', 'on') : [.995, .005],
 							('off', 'off', 'off') : [0, 1],
 							}))
 cur_input = DiscreteBayesNode('Input', [], DiscreteCPT(['on', 'off'], [1, 0]))

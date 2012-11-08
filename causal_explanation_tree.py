@@ -18,7 +18,7 @@ def generate_causal_explanation_tree(ori_graph, graph, explanatory_var, observat
         new_tree = generate_causal_explanation_tree(ori_graph, intervened_graph, cut(explanatory_var, x), \
                             observation, explanadum, path + [(x, value)], alpha)
         strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
-        					ori_graph.prob_given(explanadum, observation) ) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else 0
+        					ori_graph.prob_given(explanadum, observation), 2) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else 0
         t.add_branch(value, new_tree, strength)
 
     return t
@@ -34,7 +34,7 @@ def max_causal_information(graph, explanatory_var, observation, explanadum):
 		for x_val in graph.get_node_with_name(x).cpt.values():
 			intervened_graph = graph.create_graph_with_intervention( {x:x_val} )
 			log_part = math.log( intervened_graph.prob_given(explanadum, observation) / \
-								 denominator ) if denominator and intervened_graph.prob_given(explanadum, observation) else 0
+								 denominator, 2) if denominator and intervened_graph.prob_given(explanadum, observation) else 0
 			temp = graph.prob_given({x:x_val}, observation) * \
 						intervened_graph.prob_given(explanadum, observation) / \
 						graph.prob_given(explanadum, observation) * \
