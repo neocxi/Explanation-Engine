@@ -1,7 +1,7 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
-from explanation_tree import generate_explanation_tree
+from explanation_tree import generate_explanation_tree, generate_ET_forest
 from most_relevant_explanation import generate_MRE
-from causal_explanation_tree import generate_causal_explanation_tree
+from causal_explanation_tree import generate_causal_explanation_tree, generate_CET_forest
 
 # build the lake graph
 island = DiscreteBayesNode('Island', [], \
@@ -36,6 +36,12 @@ test_tree = generate_explanation_tree(lake_graph, ['Bird', 'Island'], {'Pox':'T'
 print test_tree
 print "========================="
 
+print "Testing Explanation Forest:"
+forest = generate_ET_forest(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, []) 
+for tree in forest:
+    print tree
+print "========================="
+
 print "Testing MRE:"
 MRE = generate_MRE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
 for x in MRE:
@@ -53,4 +59,11 @@ print "========================="
 print "Testing Causal Explanation Tree:"
 test_tree = generate_causal_explanation_tree(lake_graph, lake_graph, ['Bird', 'Island'], {}, {'Pox':'T'}, [], 0.0001) 
 print test_tree
+print "========================="
+
+
+print "Testing Explanation Forest:"
+forest = generate_CET_forest(lake_graph, lake_graph, ['Bird', 'Island'], {}, {'Pox':'T'}, []) 
+for tree in forest:
+    print tree
 print "========================="

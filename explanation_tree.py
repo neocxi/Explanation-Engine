@@ -25,7 +25,7 @@ class ExplanationTreeNode(object):
         out = ""
         out += prefix + "This node is: %s\n" % self.root
         for branch in self.children.keys():
-            out += prefix + "%s has branch assignment of %s  with score of %f\n" % (self.root, branch, self.children_prob[branch])
+            out += prefix + "%s has branch assignment of %s with score of %f\n" % (self.root, branch, self.children_prob[branch])
             if not self.children[branch].is_empty():
                out += self.children[branch].print_tree(depth + 2)
         return out 
@@ -40,13 +40,33 @@ def generate_explanation_tree(graph, explanatory_var, explanadum, path, alpha, b
 
     if len(explanatory_var) is 0:
         return ExplanationTreeNode()
+
     t = ExplanationTreeNode(parent = path[-1][0] if path else None, root = x) #new tree with a parent pointer to its parent
     
     for value in graph.get_node_with_name(x).cpt.values():
         new_tree = generate_explanation_tree(graph, cut(explanatory_var, x), \
                             explanadum, path + [(x, value)], alpha, beta)
         t.add_branch(value, new_tree, prob_given(graph, dict(path + [(x, value)]), explanadum) )
+
     return t
+
+def generate_ET_forest(graph, explanatory_var, explanadum, path):
+    if len(explanatory_var) is 0:
+        return [ExplanationTreeNode()]
+
+    forest = []
+    for x in explanatory_var:
+
+        for value in graph.get_node_with_name(x).cpt.values():
+            new_forest = generate_ET_forest(graph, cut(explanatory_var, x), \
+                                explanadum, path + [(x, value)])
+            for new_tree in new_forest:
+                t = ExplanationTreeNode(parent = path[-1][0] if path else None, root = x)
+                t.add_branch(value, new_tree, prob_given(graph, dict(path + [(x, value)]), explanadum) )
+                forest.append(t)
+
+    return forest
+
 
 def merge(a,b):
     """merge a with b"""
