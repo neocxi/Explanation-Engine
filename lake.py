@@ -38,7 +38,9 @@ print "========================="
 
 print "Testing MRE:"
 MRE = generate_MRE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
-print MRE
+for x in MRE:
+    print x
+# print MRE
 print "========================="
 
 print "Testing Causal Intervention:"

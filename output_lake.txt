@@ -1,0 +1,44 @@
+prob dist of presence of birds {'T': 0.5, 'F': 0.5}
+prob dist of presence of pox {'T': 0.45, 'F': 0.55}
+exact prob of pox present 0.45
+prob dist of presence of birds conditioned on having an island {'T': 0.75, 'F': 0.25}
+exact prob of birds present given it doesnt have an island 0.125
+Testing Explanation Tree:
+This node is: Island
+Island has branch assignment of T  with score of 0.694444
+--This node is: Bird
+--Bird has branch assignment of T  with score of 0.500000
+--Bird has branch assignment of F  with score of 0.194444
+Island has branch assignment of F  with score of 0.305556
+--This node is: Bird
+--Bird has branch assignment of T  with score of 0.055556
+--Bird has branch assignment of F  with score of 0.250000
+
+=========================
+Testing MRE:
+({'Island': 'F', 'Bird': 'T'}, 0.41176470588235303)
+({'Island': 'F'}, 0.43999999999999995)
+({'Island': 'F', 'Bird': 'F'}, 0.5555555555555556)
+({'Bird': 'F'}, 0.8)
+({'Bird': 'T'}, 1.2500000000000002)
+({'Island': 'T', 'Bird': 'T'}, 1.6666666666666667)
+({'Island': 'T', 'Bird': 'F'}, 1.6896551724137931)
+({'Island': 'T'}, 2.272727272727274)
+=========================
+Testing Causal Intervention:
+Intervene Bird to true
+post intervention probability of Bird being true 1.0
+post intervention prob of Pox being true 0.4
+=========================
+Testing Causal Explanation Tree:
+This node is: Island
+Island has branch assignment of T  with score of 0.473931
+--This node is: Bird
+--Bird has branch assignment of T  with score of 0.415037
+--Bird has branch assignment of F  with score of 0.637430
+Island has branch assignment of F  with score of -0.710493
+--This node is: Bird
+--Bird has branch assignment of T  with score of -1.169925
+--Bird has branch assignment of F  with score of -0.584963
+
+=========================

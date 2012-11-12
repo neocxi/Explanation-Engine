@@ -1,0 +1,27 @@
+Testing Explanation Tree:
+This node is: Sex
+Sex has branch assignment of m  with score of 0.694444
+--This node is: Drug
+--Drug has branch assignment of yes  with score of 0.500000
+--Drug has branch assignment of no  with score of 0.194444
+Sex has branch assignment of f  with score of 0.305556
+--This node is: Drug
+--Drug has branch assignment of yes  with score of 0.055556
+--Drug has branch assignment of no  with score of 0.250000
+
+=========================
+Testing MRE:
+[({'Drug': 'yes', 'Sex': 'f'}, 0.41176470588235303), ({'Sex': 'f'}, 0.43999999999999995), ({'Drug': 'no', 'Sex': 'f'}, 0.5555555555555557), ({'Drug': 'no'}, 0.8000000000000002), ({'Drug': 'yes'}, 1.2500000000000002), ({'Drug': 'yes', 'Sex': 'm'}, 1.6666666666666667), ({'Drug': 'no', 'Sex': 'm'}, 1.6896551724137931), ({'Sex': 'm'}, 2.272727272727274)]
+=========================
+Testing Causal Explanation Tree:
+This node is: Sex
+Sex has branch assignment of m  with score of 0.473931
+--This node is: Drug
+--Drug has branch assignment of yes  with score of 0.415037
+--Drug has branch assignment of no  with score of 0.637430
+Sex has branch assignment of f  with score of -0.710493
+--This node is: Drug
+--Drug has branch assignment of yes  with score of -1.169925
+--Drug has branch assignment of no  with score of -0.584963
+
+=========================
