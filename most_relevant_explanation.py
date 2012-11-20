@@ -11,7 +11,7 @@ def generate_MRE(graph, explanadum, exp_var):
 	for i in range(len(exp_var)): #a MRE can take 1~N assignments
 		space = assignment_space(graph, i+1, explanadum, exp_var)
 		for ind_assignment in space:
-			cur_GBF = calculate_GBF(graph, space, ind_assignment, explanadum)
+			cur_GBF = calculate_GBF(graph, ind_assignment, explanadum)
 			# for debugging, output every assignment and thier GBF
 			# print "Assignment", ind_assignment, " GBF: ", cur_GBF
 			out.append( (ind_assignment, cur_GBF) )
@@ -104,7 +104,7 @@ def assignment_space(graph, n, explanadum, exp_var):
 	return space
 
 
-def calculate_GBF(graph, space, assign, explanadum):
+def calculate_GBF(graph, assign, explanadum):
 	# print "assign, prob1, prob2: ", assign, graph.prob_given(explanadum, assign), sum( [graph.prob_given(explanadum, neg) * graph.prob(neg) for neg in space if neg != assign] )
 	# return graph.prob_given(explanadum, assign) / \
 	# 		sum( [graph.prob_given(explanadum, neg) * graph.prob(neg) for neg in space if neg != assign] ) * \

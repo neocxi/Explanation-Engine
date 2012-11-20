@@ -102,3 +102,5 @@ def max_mutual_information(graph, explanatory_var, condition):
             argmax, max_inf = x, cur_inf
     return argmax, max_inf
       
+def calculate_ET_score(graph, assignment, explanadum):
+    return graph.prob_given(assignment, explanadum)

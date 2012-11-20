@@ -63,3 +63,9 @@ def max_causal_information(graph, explanatory_var, observation, explanadum):
             max_x = x
             max_inf = cur_inf
     return max_x, max_inf
+
+def calculate_CET_score(ori_graph, explanation, observation, explanadum):
+    intervened_graph = ori_graph.create_graph_with_intervention( explanation )
+    strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
+                        ori_graph.prob_given(explanadum, observation), 2) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else 0
+    return strength
