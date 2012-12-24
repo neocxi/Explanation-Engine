@@ -2,6 +2,7 @@ from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
 from explanation_tree import generate_explanation_tree, generate_ET_forest, calculate_ET_score
 from most_relevant_explanation import generate_MRE, calculate_GBF
 from causal_explanation_tree import generate_causal_explanation_tree, generate_CET_forest, calculate_CET_score
+from most_probable_explanation import generate_MPE
 
 # build the lake graph
 island = DiscreteBayesNode('Island', [], \
@@ -46,7 +47,6 @@ print "Testing MRE:"
 MRE = generate_MRE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
 for x in MRE:
     print x
-# print MRE
 print "========================="
 
 print "Testing Causal Intervention:"
@@ -74,3 +74,10 @@ print "BGF of [Island being true]: ", calculate_GBF( lake_graph, {"Island" : "T"
 print "BGF of [Bird being true, Island being false]: ", calculate_GBF( lake_graph, {"Island" : "T", "Bird" : "T" }, {"Pox" : "T"} )
 print "ET score of [Island being true], which is essentially posterior probability of the explanation given explanadum : ", calculate_ET_score( lake_graph, {"Island" : "T"}, {"Pox" : "T"})
 print "CET score of [Island being true]", calculate_CET_score( lake_graph, {"Island" : "T"}, {}, {"Pox" : "T"}) #The empty hash is for Observation
+
+print "========================="
+print "Testing MPE:"
+MRE = generate_MPE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
+for x in MRE:
+    print x
+print "========================="

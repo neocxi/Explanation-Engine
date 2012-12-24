@@ -48,18 +48,22 @@ def permutation(n, choose_from):
 def combination(n, choose_from):
 	"""this is a helper function that returns a list of
 	all permutations of n from choose_from.
-	note: this needs to be refactored
+	Refactored
 
 	>>> combination(1, [1,2])
 	[[1], [2]]
 	>>> combination(2, [1,2])
 	[[1, 2]]"""
-	permutations = permutation(n, choose_from)
-	combinations = []
-	for item in permutations:
-		if set(item) not in combinations:
-			combinations.append(set(item))
-	return [list(item) for item in combinations]
+	if n == 0 or len(choose_from) == 0:
+		return [[]]
+
+	out = []
+	for i in range(len(choose_from)):
+		if len(choose_from) - i < n:
+			break
+		out += [x + [ choose_from[i] ]
+				for x in combination(n-1, choose_from[i+1:])]
+	return out
 
 def assignment_space(graph, n, explanadum, exp_var):
 	"""returns all possible assignments to n variables in this graph
