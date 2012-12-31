@@ -1,6 +1,6 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
 from explanation_tree import generate_explanation_tree, generate_ET_forest, calculate_ET_score
-from most_relevant_explanation import generate_MRE, calculate_GBF
+from most_relevant_explanation import generate_MRE, calculate_GBF, generate_K_MRE
 from causal_explanation_tree import generate_causal_explanation_tree, generate_CET_forest, calculate_CET_score
 
 # build the academe graph
@@ -54,3 +54,13 @@ test_tree = generate_explanation_tree(academe_graph, ['Theory', 'Practice', 'Ext
 
 print test_tree
 print "========================="
+
+print "Testing MRE:"
+MRE = generate_MRE(academe_graph, {'finalMark':'fail'}, ['Theory', 'Practice', 'Extra', 'Others'])
+for n in MRE:
+        print n
+print "========================="
+
+print "Testing K-MRE:"
+K_MRE = generate_K_MRE(MRE)
+print K_MRE

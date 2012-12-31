@@ -1,6 +1,6 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
 from explanation_tree import generate_explanation_tree, generate_ET_forest, calculate_ET_score
-from most_relevant_explanation import generate_MRE, calculate_GBF
+from most_relevant_explanation import generate_MRE, calculate_GBF, generate_K_MRE
 from causal_explanation_tree import generate_causal_explanation_tree, generate_CET_forest, calculate_CET_score
 from most_probable_explanation import generate_MPE
 
@@ -46,6 +46,12 @@ print "========================="
 print "Testing MRE:"
 MRE = generate_MRE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
 for x in MRE:
+    print x
+print "========================="
+
+print "Testing K-MRE:"
+K_MRE = generate_K_MRE(MRE)
+for x in K_MRE:
     print x
 print "========================="
 

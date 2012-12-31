@@ -1,6 +1,6 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet
 from explanation_tree import generate_explanation_tree
-from most_relevant_explanation import generate_MRE
+from most_relevant_explanation import generate_MRE, generate_K_MRE
 from causal_explanation_tree import generate_causal_explanation_tree
 
 asia = DiscreteBayesNode('VisitToAsia', [], \
@@ -62,6 +62,11 @@ explanadum = {'X_ray':'abnormal'}
 print "Testing MRE:"
 MRE = generate_MRE(asia_graph, explanadum, exp_var)
 print MRE
+print "========================="
+
+print "Testing K-MRE:"
+K_MRE = generate_K_MRE(MRE)
+print K_MRE
 print "========================="
 
 print "Testing Explanation Tree:"
