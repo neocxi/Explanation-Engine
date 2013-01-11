@@ -131,4 +131,10 @@ ET of [B and C def ]:  0.383396380738
 ET of [A def, C ok ]:  0.347612718536
 ET of [B and D def]:  0.255597587159
 ET of [C ok ]:  0.561394540436
-CET of [A def ]: 
+CET of [A def ]:  4.6758023122
+CET of [A and D ok, B and C defective ]:  4.6758023122
+CET of [All defective ]:  4.6758023122
+CET of [B and C def ]:  4.6758023122
+CET of [A def, C ok ]:  4.6758023122
+CET of [B and D def]:  4.6758023122
+CET of [C ok ]:  -0.598447807548

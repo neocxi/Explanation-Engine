@@ -1,7 +1,7 @@
 from bayesnet import DiscreteBayesNode, DiscreteCPT, DiscreteBayesNet, cut
 from explanation_tree import generate_explanation_tree, generate_ET_forest, calculate_ET_score
 from most_relevant_explanation import generate_MRE, calculate_GBF, generate_K_MRE
-from causal_explanation_tree import generate_causal_explanation_tree
+from causal_explanation_tree import generate_causal_explanation_tree, calculate_CET_score
 
 noisy = False
 # build either of the Circuit graphs
