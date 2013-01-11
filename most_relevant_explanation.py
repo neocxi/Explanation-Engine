@@ -1,7 +1,7 @@
 # This is an implementation of an algorithm finding 
 # the Most Relevant Explanation(Yuan)
 
-def generate_MRE(graph, explanadum, exp_var):
+def generate_MRE(graph, exp_var, explanadum):
     """Returns a pair(assign, GBF) where assign is a list that contain pairs of
     assignments and GBF is the generalized Bayes factor"""
 

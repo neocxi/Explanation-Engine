@@ -60,7 +60,7 @@ exp_var = ['Lung_Cancer', 'VisitToAsia', 'Tuberculosis', 'Smoking', 'Bronchitis'
 explanadum = {'X_ray':'abnormal'}
 
 print "Testing MRE:"
-MRE = generate_MRE(asia_graph, explanadum, exp_var)
+MRE = generate_MRE(asia_graph, exp_var, explanadum)
 print MRE
 print "========================="
 

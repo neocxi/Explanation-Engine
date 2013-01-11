@@ -30,7 +30,7 @@ print test_tree
 print "========================="
 
 print "Testing MRE:"
-MRE = generate_MRE(drug_graph, {'Recovery':'recovery'}, ['Sex', 'Drug'])
+MRE = generate_MRE(drug_graph, ['Sex', 'Drug'], {'Recovery':'recovery'})
 print MRE
 print "========================="
 
