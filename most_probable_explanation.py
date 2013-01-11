@@ -1,7 +1,7 @@
 # This is an implementation of the MPE algorithm
 from most_relevant_explanation import assignment_space
 
-def generate_MPE(graph, explanadum, exp_var):
+def generate_MPE(graph, exp_var, explanadum):
 	"""Returns a list of pairs (hypothesis, posterior probability) in
 	sorted order."""
 
@@ -13,3 +13,7 @@ def generate_MPE(graph, explanadum, exp_var):
 		out.append( (ind_assignment, posterior) )
 
 	return sorted(out, key = lambda x: x[1])
+
+
+def generate_MAP(graph, exp_var, explanadum):
+	pass	

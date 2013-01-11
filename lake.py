@@ -44,7 +44,7 @@ for tree in forest:
 print "========================="
 
 print "Testing MRE:"
-MRE = generate_MRE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
+MRE = generate_MRE(lake_graph, ['Bird', 'Island'], {'Pox':'T'})
 for x in MRE:
     print x
 print "========================="
@@ -83,7 +83,7 @@ print "CET score of [Island being true]", calculate_CET_score( lake_graph, {"Isl
 
 print "========================="
 print "Testing MPE:"
-MRE = generate_MPE(lake_graph, {'Pox':'T'}, ['Bird', 'Island'])
+MRE = generate_MPE(lake_graph, ['Bird', 'Island'], {'Pox':'T'})
 for x in MRE:
     print x
 print "========================="
