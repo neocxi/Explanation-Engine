@@ -3,6 +3,7 @@ from explanation_tree import generate_explanation_tree, generate_ET_forest, calc
 from most_relevant_explanation import generate_MRE, calculate_GBF, generate_K_MRE
 from causal_explanation_tree import generate_causal_explanation_tree, generate_CET_forest, calculate_CET_score
 from most_probable_explanation import generate_MPE
+from maximum_a_posteriori import generate_MAP_Ind_Simplification
 
 # build the lake graph
 island = DiscreteBayesNode('Island', [], \
@@ -84,6 +85,12 @@ print "CET score of [Island being true]", calculate_CET_score( lake_graph, {"Isl
 print "========================="
 print "Testing MPE:"
 MRE = generate_MPE(lake_graph, ['Bird', 'Island'], {'Pox':'T'})
+for x in MRE:
+    print x
+print "========================="
+
+print "Testing MAP:"
+MRE = generate_MAP_Ind_Simplification(lake_graph, ['Bird', 'Island'], {'Pox':'T'}, 0.1)
 for x in MRE:
     print x
 print "========================="

@@ -12,8 +12,4 @@ def generate_MPE(graph, exp_var, explanadum):
 		posterior = graph.prob_given(ind_assignment, explanadum)
 		out.append( (ind_assignment, posterior) )
 
-	return sorted(out, key = lambda x: x[1])
-
-
-def generate_MAP(graph, exp_var, explanadum):
-	pass	
+	return sorted(out, key = lambda x: -x[1])

@@ -3,7 +3,7 @@ from explanation_tree import generate_explanation_tree, generate_ET_forest, calc
 from most_relevant_explanation import generate_MRE, calculate_GBF, generate_K_MRE
 from causal_explanation_tree import generate_causal_explanation_tree, calculate_CET_score
 
-noisy = False
+noisy = True
 # build either of the Circuit graphs
 if noisy:
     a = DiscreteBayesNode('A_switch', [],\
