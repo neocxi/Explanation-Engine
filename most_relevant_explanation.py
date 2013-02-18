@@ -47,9 +47,6 @@ def subset_of(a, b):
 
     return True
             
-
-
-
 def permutation(n, choose_from):
     """Helper for combination
 
