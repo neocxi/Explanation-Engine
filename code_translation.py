@@ -23,3 +23,13 @@ def encode_nodes(nodes):
 				out[key + ", " + k] = cur[key] + prev[k]
 
 	return out
+
+def generate_encoding_to_csv(graph, nodes, path = "temp.csv"):
+	translation = encode_nodes([graph.variables[name] for name in nodes])
+	print translation
+
+	with open(path, 'wb') as csvfile:
+		writer = csv.writer(csvfile, dialect = 'excel')
+		writer.writerow(["Assignment", "Code"])
+		for key in translation.keys():
+			writer.writerow([key, translation[key]])
