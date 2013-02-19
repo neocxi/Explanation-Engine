@@ -13,7 +13,6 @@ class ExplanationTreeNode(object):
         return self.root == None
 
     def add_branch(self, assignment, new_tree, prob):
-        """docstring for add_branch"""
         self.children[assignment] = new_tree
         self.children_prob[assignment] = prob
 
@@ -30,6 +29,22 @@ class ExplanationTreeNode(object):
                out += self.children[branch].print_tree(depth + 2)
         return out 
             
+    def assignment_space(self):
+        out = []
+        for key in self.children.keys():
+            out.append( ({self.root : key}, self.children_prob[key]) )
+            for assignment, score in self.children[key].assignment_space():
+                out.append( (dict(assignment.items() + [(self.root, key)]), score) )
+        return out
+
+    def is_leaf(self, assignment):
+        if len(self.children) == 0 :
+            return True
+
+        if self.root in assignment:
+            return self.children[assignment[self.root]].is_leaf(assignment)
+        else:
+            return False
 
 
 def generate_explanation_tree(graph, explanatory_var, explanadum, path, alpha, beta):

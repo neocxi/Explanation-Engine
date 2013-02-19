@@ -120,73 +120,73 @@ cur_input = DiscreteBayesNode('Input', [], DiscreteCPT(['on', 'off'], [1, 0]))
 circuit_graph = DiscreteBayesNet( [a, b, c, d, a_out, b_out, c_out, d_out, out, cur_input] )
 
 
-print "Testing Causal Explanation Tree:"
-test_tree = generate_causal_explanation_tree(circuit_graph, circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {},{'Output':'on'}, [], 0.001) 
-print test_tree
-print "========================="
+# print "Testing Causal Explanation Tree:"
+# test_tree = generate_causal_explanation_tree(circuit_graph, circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {},{'Output':'on'}, [], 0.001) 
+# print test_tree
+# print "========================="
 
-print "Testing Explanation Tree:"
-test_tree = generate_explanation_tree(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on'}, [], 0.01, 0.2) 
-print test_tree
-print "========================="
-
-
-
-print "Testing MRE:"
-MRE = generate_MRE(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on', 'Input':'on'})
-for x in MRE:
-    print x
-#print MRE
-print "========================="
+# print "Testing Explanation Tree:"
+# test_tree = generate_explanation_tree(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on'}, [], 0.01, 0.2) 
+# print test_tree
+# print "========================="
 
 
 
-
-
-print "Testing scores calculations of different methods:"
-
-print "BGF of [A def ]: ", calculate_GBF( circuit_graph, {'A_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "BGF of [A and D ok, B and C defective ]: ", calculate_GBF( circuit_graph, {'A_switch': 'ok', 'B_switch': 'def', 'C_switch': 'def', 'D_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
-
-print "BGF of [All defective ]: ", calculate_GBF( circuit_graph, {'A_switch': 'def', 'B_switch':'def', 'C_switch':'def', 'D_switch':'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "BGF of [B and C def ]: ", calculate_GBF( circuit_graph, {'B_switch': 'def', 'C_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "BGF of [A def, C ok ]: ", calculate_GBF( circuit_graph, {'A_switch': 'def',  'C_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
-
-print "BGF of [B and D def]: ", calculate_GBF( circuit_graph, {'B_switch': 'def',  'D_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "BGF of [C ok ]: ", calculate_GBF( circuit_graph, {'C_switch': 'ok'},{'Output': 'on', 'Input':'on'})
-
-
-print "ET of [A def ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "ET of [A and D ok, B and C defective ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'ok', 'B_switch': 'def', 'C_switch': 'def', 'D_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
-
-print "ET of [All defective ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'def', 'B_switch':'def', 'C_switch':'def', 'D_switch':'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "ET of [B and C def ]: ", calculate_ET_score( circuit_graph, {'B_switch': 'def', 'C_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "ET of [A def, C ok ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'def',  'C_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
-
-print "ET of [B and D def]: ", calculate_ET_score( circuit_graph, {'B_switch': 'def',  'D_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
-
-print "ET of [C ok ]: ", calculate_ET_score( circuit_graph, {'C_switch': 'ok'},{'Output': 'on', 'Input':'on'})
+# print "Testing MRE:"
+# MRE = generate_MRE(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on', 'Input':'on'})
+# for x in MRE:
+#     print x
+# #print MRE
+# print "========================="
 
 
 
-print "CET of [A def ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'def'},{},{'Output': 'on', 'Input':'on'}  )
 
-print "CET of [A and D ok, B and C defective ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'ok', 'B_switch': 'def', 'C_switch': 'def', 'D_switch': 'ok'},{},{'Output': 'on', 'Input':'on'}  )
 
-print "CET of [All defective ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'def', 'B_switch':'def', 'C_switch':'def', 'D_switch':'def'},{},{'Output': 'on', 'Input':'on'}  )
+# print "Testing scores calculations of different methods:"
 
-print "CET of [B and C def ]: ", calculate_CET_score( circuit_graph, {'B_switch': 'def', 'C_switch': 'def'},{},{'Output': 'on', 'Input':'on'}  )
+# print "BGF of [A def ]: ", calculate_GBF( circuit_graph, {'A_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
 
-print "CET of [A def, C ok ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'def',  'C_switch': 'ok'},{},{'Output': 'on', 'Input':'on'}  )
+# print "BGF of [A and D ok, B and C defective ]: ", calculate_GBF( circuit_graph, {'A_switch': 'ok', 'B_switch': 'def', 'C_switch': 'def', 'D_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
 
-print "CET of [B and D def]: ", calculate_CET_score( circuit_graph, {'B_switch': 'def',  'D_switch': 'def'},{},{'Output': 'on', 'Input':'on'}  )
+# print "BGF of [All defective ]: ", calculate_GBF( circuit_graph, {'A_switch': 'def', 'B_switch':'def', 'C_switch':'def', 'D_switch':'def'},{'Output': 'on', 'Input':'on'}  )
 
-print "CET of [C ok ]: ", calculate_CET_score( circuit_graph, {'C_switch': 'ok'},{},{'Output': 'on', 'Input':'on'})
+# print "BGF of [B and C def ]: ", calculate_GBF( circuit_graph, {'B_switch': 'def', 'C_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
+
+# print "BGF of [A def, C ok ]: ", calculate_GBF( circuit_graph, {'A_switch': 'def',  'C_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
+
+# print "BGF of [B and D def]: ", calculate_GBF( circuit_graph, {'B_switch': 'def',  'D_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
+
+# print "BGF of [C ok ]: ", calculate_GBF( circuit_graph, {'C_switch': 'ok'},{'Output': 'on', 'Input':'on'})
+
+
+# print "ET of [A def ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
+
+# print "ET of [A and D ok, B and C defective ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'ok', 'B_switch': 'def', 'C_switch': 'def', 'D_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
+
+# print "ET of [All defective ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'def', 'B_switch':'def', 'C_switch':'def', 'D_switch':'def'},{'Output': 'on', 'Input':'on'}  )
+
+# print "ET of [B and C def ]: ", calculate_ET_score( circuit_graph, {'B_switch': 'def', 'C_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
+
+# print "ET of [A def, C ok ]: ", calculate_ET_score( circuit_graph, {'A_switch': 'def',  'C_switch': 'ok'},{'Output': 'on', 'Input':'on'}  )
+
+# print "ET of [B and D def]: ", calculate_ET_score( circuit_graph, {'B_switch': 'def',  'D_switch': 'def'},{'Output': 'on', 'Input':'on'}  )
+
+# print "ET of [C ok ]: ", calculate_ET_score( circuit_graph, {'C_switch': 'ok'},{'Output': 'on', 'Input':'on'})
+
+
+
+# print "CET of [A def ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'def'},{},{'Output': 'on', 'Input':'on'}  )
+
+# print "CET of [A and D ok, B and C defective ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'ok', 'B_switch': 'def', 'C_switch': 'def', 'D_switch': 'ok'},{},{'Output': 'on', 'Input':'on'}  )
+
+# print "CET of [All defective ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'def', 'B_switch':'def', 'C_switch':'def', 'D_switch':'def'},{},{'Output': 'on', 'Input':'on'}  )
+
+# print "CET of [B and C def ]: ", calculate_CET_score( circuit_graph, {'B_switch': 'def', 'C_switch': 'def'},{},{'Output': 'on', 'Input':'on'}  )
+
+# print "CET of [A def, C ok ]: ", calculate_CET_score( circuit_graph, {'A_switch': 'def',  'C_switch': 'ok'},{},{'Output': 'on', 'Input':'on'}  )
+
+# print "CET of [B and D def]: ", calculate_CET_score( circuit_graph, {'B_switch': 'def',  'D_switch': 'def'},{},{'Output': 'on', 'Input':'on'}  )
+
+# print "CET of [C ok ]: ", calculate_CET_score( circuit_graph, {'C_switch': 'ok'},{},{'Output': 'on', 'Input':'on'})
 

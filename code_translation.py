@@ -1,5 +1,10 @@
 import csv
-from most_relevant_explanation import assignment_space
+from most_relevant_explanation import *
+from most_probable_explanation import generate_MPE
+from maximum_a_posteriori import generate_MAP_Ind_Simplification
+from explanation_tree import generate_explanation_tree, calculate_ET_score
+from causal_explanation_tree import generate_causal_explanation_tree, calculate_CET_score
+
 
 def encode_a_graph(graph):
 	"""Takes a graph object.
@@ -24,12 +29,131 @@ def encode_nodes(nodes):
 
 	return out
 
+def encode_nodes_to_hash(nodes):
+	out = {}
+	code = '0'
+	if len(nodes) == 1:
+		for value in nodes[0].cpt.values():
+			out[code] = {nodes[0].name : value}
+			code = chr(ord(code) + 1)
+		out['9'] = {}
+	else:
+		prev = encode_nodes_to_hash([node for node in nodes if node != nodes[0]])
+		cur = encode_nodes_to_hash([nodes[0]])
+		for key in cur.keys():
+			for k in prev.keys():
+				out[ key + k ] = dict(cur[key].items() + prev[k].items())
+
+	return out
+
 def generate_encoding_to_csv(graph, nodes, path = "temp.csv"):
 	translation = encode_nodes([graph.variables[name] for name in nodes])
-	print translation
+	# print translation
 
 	with open(path, 'wb') as csvfile:
 		writer = csv.writer(csvfile, dialect = 'excel')
 		writer.writerow(["Assignment", "Code"])
 		for key in translation.keys():
 			writer.writerow([key, translation[key]])
+
+def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
+	# Assume for now that the codes in csv use the some scheme as implied
+    # by this script
+    assignments = []
+    code_hash = encode_nodes_to_hash([graph.variables[name] for name in exp_var])
+    MPE_space = generate_MPE(graph, exp_var, explanadum)
+    MAP_threshold = 0.1
+    MAP_space = generate_MAP_Ind_Simplification(graph, exp_var, explanadum, MAP_threshold)
+    MRE_space = generate_MRE(graph, exp_var, explanadum)
+
+    alpha = 0.01
+    beta = 0.2
+    ET = generate_explanation_tree(graph, exp_var, explanadum, [], alpha, beta)
+    ET_space = sorted(ET.assignment_space(), key = lambda x: -x[1])
+    ET_score_space = sorted(
+    		[(code_hash[key], calculate_ET_score(graph, code_hash[key], explanadum)) for key in code_hash.keys()],
+    		key = lambda x: -x[1])
+
+    alpha_CET = 0.01
+    CET = generate_causal_explanation_tree(graph, graph, exp_var, {}, explanadum, [], alpha_CET)
+    CET_space = sorted(CET.assignment_space(), key = lambda x: -x[1])
+    CET_score_space = sorted(
+    		[(code_hash[key], calculate_CET_score(graph, code_hash[key], {}, explanadum)) for key in code_hash.keys()],
+    		key = lambda x: -x[1])
+
+    with open(path, 'r') as csvfile:
+    	reader = csv.reader(csvfile, dialect = 'excel')
+    	for row in reader:
+    		assignments.append((row[0], code_hash[row[0]]))
+
+    with open(path, 'w') as csvfile:
+   		writer = csv.writer(csvfile, dialect = 'excel') 
+   		for code, assignment in assignments:
+   			row = [code]
+   			rank = space_rank(MPE_space, assignment)
+   			if rank:
+	   			row.append(rank)# MPE rank
+	   			row.append(MPE_space[rank - 1][1]) # MPE score
+	   		else:
+	   			row.append("NaN")
+	   			row.append("NaN")
+
+	   		rank = space_rank(MAP_space, assignment)
+	   		if rank:
+	   			row.append(rank)# map rank
+	   			row.append(MAP_space[rank - 1][1]) # MPE score
+	   		else:
+	   			row.append("NaN")
+	   			row.append("NaN")
+
+	   		row.append(MAP_threshold)
+
+	   		rank = space_rank(MRE_space, assignment)
+	   		if rank:
+	   			row.append(rank)# mre rank
+	   			row.append(MRE_space[rank - 1][1]) # MPE score
+	   		else:
+	   			row.append("NaN")
+	   			row.append("NaN")
+
+	   		rank = space_rank(ET_space, assignment)
+	   		if rank:
+	   			row.append(rank)# et tree rank
+	   		else:
+	   			row.append("NaN")
+
+	   		rank = space_rank(ET_score_space, assignment)
+	   		if rank:
+	   			row.append(rank) # et score rank
+	   			row.append(ET_score_space[rank - 1][1]) # ET score
+	   		else:
+	   			row.append("ERROR ! should not happen") #should not happen
+
+	   		row += [1] if ET.is_leaf(assignment) else [0]
+	   		row.append(alpha)
+	   		row.append(beta)
+
+	   		rank = space_rank(CET_space, assignment)
+	   		if rank:
+	   			row.append(rank)# et tree rank
+	   		else:
+	   			row.append("NaN")
+
+	   		rank = space_rank(CET_score_space, assignment)
+	   		if rank:
+	   			row.append(rank) # et score rank
+	   			row.append(CET_score_space[rank - 1][1]) # ET score
+	   		else:
+	   			row.append("ERROR ! should not happen") #should not happen
+
+	   		row += [1] if CET.is_leaf(assignment) else [0]
+	   		row.append(alpha_CET)
+
+   			writer.writerow(row)
+
+
+def space_rank(space, assignment):
+	return [node[0] for node in space].index(assignment) + 1 if assignment in [node[0] for node in space] else 0
+
+
+
