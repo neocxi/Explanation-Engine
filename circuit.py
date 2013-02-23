@@ -3,7 +3,7 @@ from explanation_tree import generate_explanation_tree, generate_ET_forest, calc
 from most_relevant_explanation import generate_MRE, calculate_GBF, generate_K_MRE
 from causal_explanation_tree import generate_causal_explanation_tree, calculate_CET_score
 
-noisy = True
+noisy = False 
 # build either of the Circuit graphs
 if noisy:
     a = DiscreteBayesNode('A_switch', [],\
@@ -120,15 +120,15 @@ cur_input = DiscreteBayesNode('Input', [], DiscreteCPT(['on', 'off'], [1, 0]))
 circuit_graph = DiscreteBayesNet( [a, b, c, d, a_out, b_out, c_out, d_out, out, cur_input] )
 
 
-# print "Testing Causal Explanation Tree:"
-# test_tree = generate_causal_explanation_tree(circuit_graph, circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {},{'Output':'on'}, [], 0.001) 
-# print test_tree
-# print "========================="
+print "Testing Causal Explanation Tree:"
+test_tree = generate_causal_explanation_tree(circuit_graph, circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {},{'Output':'on'}, [], 0.001) 
+print test_tree
+print "========================="
 
-# print "Testing Explanation Tree:"
-# test_tree = generate_explanation_tree(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on'}, [], 0.01, 0.2) 
-# print test_tree
-# print "========================="
+print "Testing Explanation Tree:"
+test_tree = generate_explanation_tree(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on'}, [], 0.01, 0.2) 
+print test_tree
+print "========================="
 
 
 

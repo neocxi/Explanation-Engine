@@ -4,7 +4,7 @@ from most_probable_explanation import generate_MPE
 from maximum_a_posteriori import generate_MAP_Ind_Simplification
 from explanation_tree import generate_explanation_tree, calculate_ET_score
 from causal_explanation_tree import generate_causal_explanation_tree, calculate_CET_score
-
+from string import join
 
 def encode_a_graph(graph):
 	"""Takes a graph object.
@@ -31,11 +31,11 @@ def encode_nodes(nodes):
 
 def encode_nodes_to_hash(nodes):
 	out = {}
-	code = '0'
+	code = '1'
 	if len(nodes) == 1:
 		for value in nodes[0].cpt.values():
 			out[code] = {nodes[0].name : value}
-			code = chr(ord(code) + 1)
+			code = chr(ord(code) - 1)
 		out['9'] = {}
 	else:
 		prev = encode_nodes_to_hash([node for node in nodes if node != nodes[0]])
@@ -84,12 +84,14 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     with open(path, 'r') as csvfile:
     	reader = csv.reader(csvfile, dialect = 'excel')
     	for row in reader:
-    		assignments.append((row[0], code_hash[row[0]]))
+    		processed_code = join([row[0][i] for i in range(len(exp_var))], "")
+    		assignments.append((row[0], code_hash[processed_code]))
 
     with open(path, 'w') as csvfile:
    		writer = csv.writer(csvfile, dialect = 'excel') 
+   		writer.writerow(["CondensedString","MPE_rank","MPE_score","MAP_I_rank","MAP_I_score","MAP_I_para_theta","MRE_rank","MRE_score","ET_rank_for_tree","ET_rank_for_score","ET_score","ET_leaf","ET_ALPHA","ET_BETA","CET_rank_for_tree","CET_rank_for_score","CET_score","CET_leaf","CET_ALPHA"])
    		for code, assignment in assignments:
-   			row = [code]
+   			row = ['"' + code + '"']
    			rank = space_rank(MPE_space, assignment)
    			if rank:
 	   			row.append(rank)# MPE rank
