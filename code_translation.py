@@ -5,6 +5,7 @@ from maximum_a_posteriori import generate_MAP_Ind_Simplification
 from explanation_tree import generate_explanation_tree, calculate_ET_score
 from causal_explanation_tree import generate_causal_explanation_tree, calculate_CET_score
 from string import join
+import math
 
 def encode_a_graph(graph):
 	"""Takes a graph object.
@@ -73,13 +74,15 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     ET_score_space = sorted(
     		[(code_hash[key], calculate_ET_score(graph, code_hash[key], explanadum)) for key in code_hash.keys()],
     		key = lambda x: -x[1])
+    print ET_score_space
 
     alpha_CET = 0.01
     CET = generate_causal_explanation_tree(graph, graph, exp_var, {}, explanadum, [], alpha_CET)
     CET_space = sorted(CET.assignment_space(), key = lambda x: -x[1])
     CET_score_space = sorted(
     		[(code_hash[key], calculate_CET_score(graph, code_hash[key], {}, explanadum)) for key in code_hash.keys()],
-    		key = lambda x: -x[1])
+    		key = lambda x: -x[1] if not math.isnan(x[1]) else 9999999999999)
+    print CET_score_space
 
     with open(path, 'r') as csvfile:
     	reader = csv.reader(csvfile, dialect = 'excel')
@@ -87,6 +90,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     		processed_code = join([row[0][i] for i in range(len(exp_var))], "")
     		assignments.append((row[0], code_hash[processed_code]))
 
+    print assignments
     with open(path, 'w') as csvfile:
    		writer = csv.writer(csvfile, dialect = 'excel') 
    		writer.writerow(["CondensedString","MPE_rank","MPE_score","MAP_I_rank","MAP_I_score","MAP_I_para_theta","MRE_rank","MRE_score","ET_rank_for_tree","ET_rank_for_score","ET_score","ET_leaf","ET_ALPHA","ET_BETA","CET_rank_for_tree","CET_rank_for_score","CET_score","CET_leaf","CET_ALPHA"])
@@ -95,7 +99,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
    			rank = space_rank(MPE_space, assignment)
    			if rank:
 	   			row.append(rank)# MPE rank
-	   			row.append(MPE_space[rank - 1][1]) # MPE score
+	   			row.append(MPE_space[int(rank) - 1][1]) # MPE score
 	   		else:
 	   			row.append("NaN")
 	   			row.append("NaN")
@@ -103,7 +107,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 	   		rank = space_rank(MAP_space, assignment)
 	   		if rank:
 	   			row.append(rank)# map rank
-	   			row.append(MAP_space[rank - 1][1]) # MPE score
+	   			row.append(MAP_space[int(rank) - 1][1]) # MAP score
 	   		else:
 	   			row.append("NaN")
 	   			row.append("NaN")
@@ -113,7 +117,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 	   		rank = space_rank(MRE_space, assignment)
 	   		if rank:
 	   			row.append(rank)# mre rank
-	   			row.append(MRE_space[rank - 1][1]) # MPE score
+	   			row.append(MRE_space[int(rank) - 1][1]) # MRE score
 	   		else:
 	   			row.append("NaN")
 	   			row.append("NaN")
@@ -125,9 +129,10 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 	   			row.append("NaN")
 
 	   		rank = space_rank(ET_score_space, assignment)
+	   		print code, assignment, rank, ET_score_space[int(rank) - 1][1]
 	   		if rank:
 	   			row.append(rank) # et score rank
-	   			row.append(ET_score_space[rank - 1][1]) # ET score
+	   			row.append(ET_score_space[int(rank) - 1][1]) # ET score
 	   		else:
 	   			row.append("ERROR ! should not happen") #should not happen
 
@@ -144,7 +149,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 	   		rank = space_rank(CET_score_space, assignment)
 	   		if rank:
 	   			row.append(rank) # et score rank
-	   			row.append(CET_score_space[rank - 1][1]) # ET score
+	   			row.append(CET_score_space[int(rank) - 1][1]) # ET score
 	   		else:
 	   			row.append("ERROR ! should not happen") #should not happen
 
@@ -155,7 +160,34 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 
 
 def space_rank(space, assignment):
-	return [node[0] for node in space].index(assignment) + 1 if assignment in [node[0] for node in space] else 0
+	assgn_list = [node[0] for node in space]
+	value_list = [node[1] for node in space]
+	print "p in space_rank"
+	print space
+	print rankdata(value_list)
+	if assignment in assgn_list:
+		return rankdata(value_list)[assgn_list.index(assignment)]
+	else:
+		return 0
+	# return [node[0] for node in space].index(assignment) + 1 if assignment in [node[0] for node in space] else 0
 
+def rank_simple(vector):
+    return sorted(range(len(vector)), key = lambda x: -vector.__getitem__(x) if not math.isnan(vector.__getitem__(x)) else 9999999999999)
 
-
+def rankdata(a):
+    n = len(a)
+    ivec=rank_simple(a)
+    svec=[a[rank] for rank in ivec]
+    sumranks = 0
+    dupcount = 0
+    newarray = [0]*n
+    for i in xrange(n):
+        sumranks += i
+        dupcount += 1
+        if i==n-1 or svec[i] != svec[i+1]:
+            averank = sumranks / float(dupcount) + 1
+            for j in xrange(i-dupcount+1,i+1):
+                newarray[ivec[j]] = averank
+            sumranks = 0
+            dupcount = 0
+    return newarray
