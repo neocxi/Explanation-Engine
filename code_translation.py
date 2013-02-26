@@ -74,7 +74,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     ET_score_space = sorted(
     		[(code_hash[key], calculate_ET_score(graph, code_hash[key], explanadum)) for key in code_hash.keys()],
     		key = lambda x: -x[1])
-    print ET_score_space
+    # print ET_score_space
 
     alpha_CET = 0.01
     CET = generate_causal_explanation_tree(graph, graph, exp_var, {}, explanadum, [], alpha_CET)
@@ -82,7 +82,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     CET_score_space = sorted(
     		[(code_hash[key], calculate_CET_score(graph, code_hash[key], {}, explanadum)) for key in code_hash.keys()],
     		key = lambda x: -x[1] if not math.isnan(x[1]) else 9999999999999)
-    print CET_score_space
+    # print CET_score_space
 
     with open(path, 'r') as csvfile:
     	reader = csv.reader(csvfile, dialect = 'excel')
@@ -90,7 +90,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     		processed_code = join([row[0][i] for i in range(len(exp_var))], "")
     		assignments.append((row[0], code_hash[processed_code]))
 
-    print assignments
+    # print assignments
     with open(path, 'w') as csvfile:
    		writer = csv.writer(csvfile, dialect = 'excel') 
    		writer.writerow(["CondensedString","MPE_rank","MPE_score","MAP_I_rank","MAP_I_score","MAP_I_para_theta","MRE_rank","MRE_score","ET_rank_for_tree","ET_rank_for_score","ET_score","ET_leaf","ET_ALPHA","ET_BETA","CET_rank_for_tree","CET_rank_for_score","CET_score","CET_leaf","CET_ALPHA"])
@@ -129,7 +129,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 	   			row.append("NaN")
 
 	   		rank = space_rank(ET_score_space, assignment)
-	   		print code, assignment, rank, ET_score_space[int(rank) - 1][1]
+	   		# print code, assignment, rank, ET_score_space[int(rank) - 1][1]
 	   		if rank:
 	   			row.append(rank) # et score rank
 	   			row.append(ET_score_space[int(rank) - 1][1]) # ET score
@@ -162,9 +162,9 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 def space_rank(space, assignment):
 	assgn_list = [node[0] for node in space]
 	value_list = [node[1] for node in space]
-	print "p in space_rank"
-	print space
-	print rankdata(value_list)
+	# print "p in space_rank"
+	# print space
+	# print rankdata(value_list)
 	if assignment in assgn_list:
 		return rankdata(value_list)[assgn_list.index(assignment)]
 	else:
