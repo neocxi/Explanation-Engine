@@ -72,7 +72,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     ET = generate_explanation_tree(graph, exp_var, explanadum, [], alpha, beta)
     ET_space = sorted(ET.assignment_space(), key = lambda x: -x[1])
     ET_score_space = sorted(
-    		[(code_hash[key], calculate_ET_score(graph, code_hash[key], explanadum)) for key in code_hash.keys()],
+    		[(code_hash[key], calculate_ET_score(graph, code_hash[key], explanadum)) for key in code_hash.keys() if len(code_hash[key])],
     		key = lambda x: -x[1])
     # print ET_score_space
 
@@ -80,7 +80,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     CET = generate_causal_explanation_tree(graph, graph, exp_var, {}, explanadum, [], alpha_CET)
     CET_space = sorted(CET.assignment_space(), key = lambda x: -x[1])
     CET_score_space = sorted(
-    		[(code_hash[key], calculate_CET_score(graph, code_hash[key], {}, explanadum)) for key in code_hash.keys()],
+    		[(code_hash[key], calculate_CET_score(graph, code_hash[key], {}, explanadum)) for key in code_hash.keys() if len(code_hash[key])],
     		key = lambda x: -x[1] if not math.isnan(x[1]) else 9999999999999)
     # print CET_score_space
 
@@ -96,6 +96,12 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
    		writer.writerow(["CondensedString","MPE_rank","MPE_score","MAP_I_rank","MAP_I_score","MAP_I_para_theta","MRE_rank","MRE_score","ET_rank_for_tree","ET_rank_for_score","ET_score","ET_leaf","ET_ALPHA","ET_BETA","CET_rank_for_tree","CET_rank_for_score","CET_score","CET_leaf","CET_ALPHA"])
    		for code, assignment in assignments:
    			row = ['"' + code + '"']
+   			# escape all empty explanations
+   			if not len(assignment):
+   				row += ["NaN" for _ in range(18)]
+   				writer.writerow(row)
+   				continue
+
    			rank = space_rank(MPE_space, assignment)
    			if rank:
 	   			row.append(rank)# MPE rank

@@ -120,10 +120,10 @@ cur_input = DiscreteBayesNode('Input', [], DiscreteCPT(['on', 'off'], [1, 0]))
 circuit_graph = DiscreteBayesNet( [a, b, c, d, a_out, b_out, c_out, d_out, out, cur_input] )
 
 
-# print "Testing Causal Explanation Tree:"
-# test_tree = generate_causal_explanation_tree(circuit_graph, circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {},{'Output':'on'}, [], 0.001) 
-# print test_tree
-# print "========================="
+print "Testing Causal Explanation Tree:"
+test_tree = generate_causal_explanation_tree(circuit_graph, circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {},{'Output':'on'}, [], 0.001) 
+print test_tree
+print "========================="
 
 # print "Testing Explanation Tree:"
 # test_tree = generate_explanation_tree(circuit_graph, ['A_switch', 'B_switch', 'C_switch', 'D_switch'], {'Output':'on'}, [], 0.01, 0.2) 

@@ -38,12 +38,17 @@ class ExplanationTreeNode(object):
         return out
 
     def is_leaf(self, assignment):
-        if len(self.children) == 0 :
+        # print "testing if", assignment, "on ", self.root
+        if len(self.children) == 0 and len(assignment) == 0:
+            # print "returning true"
             return True
 
         if self.root in assignment:
-            return self.children[assignment[self.root]].is_leaf(assignment)
+            assignment = assignment.copy()
+            child = assignment.pop(self.root)
+            return self.children[child].is_leaf(assignment)
         else:
+            # print "returning false"
             return False
 
 
