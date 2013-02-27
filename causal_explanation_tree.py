@@ -18,7 +18,7 @@ def generate_causal_explanation_tree(ori_graph, graph, explanatory_var, observat
         new_tree = generate_causal_explanation_tree(ori_graph, intervened_graph, cut(explanatory_var, x), \
                             observation, explanadum, path + [(x, value)], alpha)
         strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
-                            ori_graph.prob_given(explanadum, observation), 2) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else 0
+                            ori_graph.prob_given(explanadum, observation), 2) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else float("NaN")
         t.add_branch(value, new_tree, strength)
 
     return t
@@ -36,7 +36,7 @@ def generate_CET_forest(ori_graph, graph, explanatory_var, observation, explanad
             for new_tree in new_forest:
                 t = ExplanationTreeNode(parent = path[-1][0] if path else None, root = x)
                 strength = math.log( intervened_graph.prob_given(explanadum, observation) / \
-                            ori_graph.prob_given(explanadum, observation), 2) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else 0
+                            ori_graph.prob_given(explanadum, observation), 2) if intervened_graph.prob_given(explanadum, observation) and ori_graph.prob_given(explanadum, observation) else float("NaN")
                 t.add_branch(value, new_tree, strength)
                 forest.append(t)
 
