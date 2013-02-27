@@ -183,7 +183,7 @@ def rank_simple(vector):
 def rankdata(a):
     n = len(a)
     ivec=rank_simple(a)
-    svec=[a[rank] for rank in ivec]
+    svec=[a[rank] if not math.isnan(a[rank]) else 9999999999999 for rank in ivec]
     sumranks = 0
     dupcount = 0
     newarray = [0]*n
