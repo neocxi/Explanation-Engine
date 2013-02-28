@@ -57,7 +57,7 @@ def generate_encoding_to_csv(graph, nodes, path = "temp.csv"):
 		for key in translation.keys():
 			writer.writerow([key, translation[key]])
 
-def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
+def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv", lake = 0):
 	# Assume for now that the codes in csv use the some scheme as implied
     # by this script
     assignments = []
@@ -76,8 +76,9 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
     		key = lambda x: -x[1])
     # print ET_score_space
 
-    alpha_CET = 0.01
+    alpha_CET = 0.0001
     CET = generate_causal_explanation_tree(graph, graph, exp_var, {}, explanadum, [], alpha_CET)
+    # print "Printing cet", CET
     CET_space = sorted(CET.assignment_space(), key = lambda x: -x[1])
     CET_score_space = sorted(
     		[(code_hash[key], calculate_CET_score(graph, code_hash[key], {}, explanadum)) for key in code_hash.keys() if len(code_hash[key])],
@@ -97,7 +98,10 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
    		for code, assignment in assignments:
    			row = ['"' + code + '"']
    			# escape all empty explanations
-   			if not len(assignment):
+   			# and all invalid assignemnts for lake.py
+   			print lake, code[2] != '9', code[3] != '9'
+   			if (not len(assignment)) or (lake and (code[2] != '9' or code[3] != '9')):
+   				print "escaping"
    				row += ["NaN" for _ in range(18)]
    				writer.writerow(row)
    				continue
@@ -159,6 +163,7 @@ def fill_in_csv(graph, exp_var, explanadum, path = "temp.csv"):
 	   		else:
 	   			row.append("ERROR ! should not happen") #should not happen
 
+	   		# print "determining leaf for", code
 	   		row += [1] if CET.is_leaf(assignment) else [0]
 	   		row.append(alpha_CET)
 
